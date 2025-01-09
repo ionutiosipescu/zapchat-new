@@ -7,7 +7,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 import { blurhash } from "../utils/common";
-import { useAuth } from "../context/authContext";
+import { useAuthStore } from "../store";
 import {
   Menu,
   MenuOptions,
@@ -20,10 +20,11 @@ import { AntDesign, Feather } from "@expo/vector-icons";
 // todo:
 // * remove ios const, we can use safe areas library for safe spaces
 // * refactor styles to be defined outside this file
+// * use token colors instead of #hex
 
 const ios = Platform.OS == "ios";
 export default function HomeHeader() {
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuthStore();
 
   const { top } = useSafeAreaInsets();
   const handleProfile = () => {};
