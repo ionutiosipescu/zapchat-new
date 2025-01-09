@@ -1,18 +1,23 @@
-import { View, Text, Pressable, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../context/authContext";
+import { useAuthStore } from "../../store";
 import { StatusBar } from "expo-status-bar";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import ChatList from "../../components/ChatList";
-import Loading from "../../components/Loading";
 import { getDocs, query, where } from "firebase/firestore";
-import { usersRef } from "../../firebaseConfig";
+import { usersRef } from "../../config/firebaseConfig";
+
+// todo
+// * functions that are realted to db should be defined outside component file
+// * logic in return is incorect
+// * we need loading state when fetching for users
+// * we need empty state if no user
 
 export default function Home() {
-  const { logout, user } = useAuth();
+  const { logout, user } = useAuthStore();
   const [users, setUsers] = useState([]);
   useEffect(() => {
     if (user?.uid) getUsers();
@@ -30,8 +35,6 @@ export default function Home() {
     setUsers(data);
   };
 
-  console.log("users", users);
-
   return (
     <View className="flex-1 bg-white">
       <StatusBar style="light" />
@@ -41,7 +44,6 @@ export default function Home() {
       ) : (
         <View className="flex items-center" style={{ top: hp(30) }}>
           <ActivityIndicator size="large" />
-          {/* <Loading size={hp(10)} /> */}
         </View>
       )}
     </View>

@@ -17,11 +17,19 @@ import { Feather, Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Loading from "../components/Loading";
 import CustomKeyboardView from "../components/CustomKeyboardView";
-import { useAuth } from "../context/authContext";
+import { useAuthStore } from "../store";
+
+// todo
+// * change refs to update an object that contains all form values with state
+// * loading state should come from firebase I think, check that
+// * requires should be at the top not inline
+// * refactor styles to be defined outside this file or just tailwind styles
+// * use token colors instead of #hex or something else
+// * login user after succesfull register
 
 export default function SignUp() {
   const router = useRouter();
-  const { register } = useAuth();
+  const { register } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
   const emailRef = useRef("");
@@ -48,10 +56,10 @@ export default function SignUp() {
       profileRef.current
     );
     setLoading(false);
+    console.log("response", response);
 
-    // console.log('got result: ', response);
     if (!response.success) {
-      Alert.alert("Sign Up", response.msg);
+      Alert.alert("Sign Up", response.error);
     }
   };
   return (

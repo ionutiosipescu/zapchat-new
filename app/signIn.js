@@ -17,12 +17,19 @@ import { Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Loading from "../components/Loading";
 import CustomKeyboardView from "../components/CustomKeyboardView";
-import { useAuth } from "../context/authContext";
+import { useAuthStore } from "../store";
+
+// todo
+// * change refs to update an object that contains all form values with state
+// * loading state should come from firebase I think, check that
+// * requires should be at the top not inline
+// * refactor styles to be defined outside this file or just tailwind styles
+// * use token colors instead of #hex or something else
 
 export default function SignIn() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login } = useAuthStore();
 
   const emailRef = useRef("");
   const passwordRef = useRef("");
@@ -35,10 +42,10 @@ export default function SignIn() {
 
     setLoading(true);
     const response = await login(emailRef.current, passwordRef.current);
+    console.log("response login", response);
     setLoading(false);
-    // console.log('sign in reposnse: ', response);
     if (!response.success) {
-      Alert.alert("Sign In", response.msg);
+      Alert.alert("Sign In", response.error);
     }
   };
   return (
@@ -48,7 +55,6 @@ export default function SignIn() {
         style={{ paddingTop: hp(8), paddingHorizontal: wp(5) }}
         className="flex-1 gap-12"
       >
-        {/* signIn image */}
         <View className="items-center">
           <Image
             style={{ height: hp(25) }}
